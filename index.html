@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Wallet</title>
+<title>My Wallet Premium</title>
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-                url('bg.jpg') no-repeat center center/cover;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                url('bg.jpg') no-repeat center/cover;
     color:white;
 }
 
@@ -30,18 +30,19 @@ body{
 .login-box{
     width:90%;
     max-width:350px;
-    background:rgba(17,28,51,0.85);
+    background:rgba(17,28,51,0.9);
     padding:25px;
     border-radius:20px;
     text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
 .logo{
-    width:90px;
+    width:80px;
     margin-bottom:15px;
 }
 
-.login-box input{
+input{
     width:100%;
     padding:14px;
     margin:8px 0;
@@ -51,14 +52,13 @@ body{
     color:white;
 }
 
-.login-box button{
+button{
     width:100%;
     padding:14px;
     border:none;
     border-radius:10px;
-    background:#3b82f6;
-    color:white;
     font-weight:bold;
+    cursor:pointer;
 }
 
 /* DASHBOARD */
@@ -66,8 +66,7 @@ body{
 
 .header{
     padding:20px;
-    display:flex;
-    align-items:center;
+    font-size:18px;
     font-weight:bold;
 }
 
@@ -75,13 +74,12 @@ body{
     margin:15px;
     padding:20px;
     border-radius:20px;
-    background:#3b82f6;
+    background:linear-gradient(135deg,#3b82f6,#1d4ed8);
 }
 
 .balance{
-    font-size:30px;
+    font-size:32px;
     font-weight:bold;
-    margin-top:10px;
 }
 
 .menu{
@@ -90,43 +88,28 @@ body{
     padding:15px;
 }
 
-.menu button{
-    flex:1;
-    padding:15px;
-    border:none;
-    border-radius:15px;
-    color:white;
-    font-weight:bold;
-}
-
 .topup{background:#22c55e;}
 .withdraw{background:#ef4444;}
 
 .box{
     margin:15px;
     padding:15px;
-    background:rgba(17,28,51,0.85);
+    background:rgba(17,28,51,0.9);
     border-radius:15px;
     display:none;
 }
 
-.box input{
-    width:100%;
-    padding:12px;
-    margin:5px 0;
-    border:none;
-    border-radius:10px;
-    background:#0b1220;
-    color:white;
+.wa button{
+    background:#25D366;
 }
 
-.wa button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    background:#25D366;
-    margin-top:10px;
+/* ANIMASI */
+.fade{
+    animation:fade .4s;
+}
+@keyframes fade{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;}
 }
 </style>
 </head>
@@ -135,23 +118,21 @@ body{
 
 <!-- LOGIN -->
 <div id="login">
-    <div class="login-box">
+    <div class="login-box fade">
         <img src="logo.png" class="logo">
         <h2>Masuk</h2>
         <input type="text" id="idInput" placeholder="ID">
         <input type="password" id="passInput" placeholder="Kata Sandi">
-        <button onclick="login()">Masuk</button>
+        <button onclick="login()" style="background:#3b82f6;color:white;">Masuk</button>
     </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboard">
 
-<div class="header">
-    My Wallet
-</div>
+<div class="header">My Wallet Premium</div>
 
-<div class="balance-card">
+<div class="balance-card fade">
     <div>Saldo</div>
     <div class="balance">RM <span id="saldo">0.00</span></div>
     <div id="userInfo"></div>
@@ -162,8 +143,7 @@ body{
     <button class="withdraw" onclick="showWithdraw()">Tarik Dana</button>
 </div>
 
-<!-- TOPUP -->
-<div class="box" id="topupBox">
+<div class="box fade" id="topupBox">
     <p><b>Transfer ke Admin</b></p>
     <p>Bank: BRI</p>
     <p>No Rek: 330501007338502</p>
@@ -177,14 +157,12 @@ body{
     </div>
 </div>
 
-<!-- WITHDRAW -->
-<div class="box" id="withdrawBox">
+<div class="box fade" id="withdrawBox">
     <input type="number" id="wdJumlah" placeholder="Jumlah">
     <input type="text" id="wdBank" placeholder="Nama Bank">
     <input type="text" id="wdRek" placeholder="No Rekening">
     <input type="text" id="wdNama" placeholder="Nama Pemilik">
-
-    <button onclick="submitWithdraw()">Kirim</button>
+    <button onclick="submitWithdraw()" style="background:#ef4444;color:white;">Kirim</button>
 </div>
 
 </div>
@@ -199,59 +177,57 @@ const users = [
 
 let currentUser = null;
 
-/* FORMAT RM 100.000.00 */
+/* FORMAT */
 function formatRM(x){
-    return Number(x)
+    return Number(x || 0)
     .toLocaleString("ms-MY",{minimumFractionDigits:2})
     .replace(/,/g,".");
 }
 
 /* LOGIN */
 function login(){
-    const id = document.getElementById("idInput").value;
-    const pass = document.getElementById("passInput").value;
+    const id = idInput.value.trim();
+    const pass = passInput.value.trim();
 
     const user = users.find(u => u.id === id && u.password === pass);
 
     if(!user){
-        alert("Login gagal");
+        alert("ID atau password salah!");
         return;
     }
 
     currentUser = user;
 
-    document.getElementById("login").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
+    login.style.display = "none";
+    dashboard.style.display = "block";
 
-    document.getElementById("userInfo").innerText =
-        user.nama + " (" + user.id + ")";
+    userInfo.innerText = `${user.nama} (${user.id})`;
 
     updateSaldo();
 }
 
 /* SALDO */
 function updateSaldo(){
-    document.getElementById("saldo").innerText =
-        formatRM(currentUser.saldo);
+    saldo.innerText = formatRM(currentUser.saldo);
 }
 
 /* MENU */
 function showTopup(){
-    document.getElementById("topupBox").style.display = "block";
-    document.getElementById("withdrawBox").style.display = "none";
+    topupBox.style.display = "block";
+    withdrawBox.style.display = "none";
 }
 
 function showWithdraw(){
-    document.getElementById("withdrawBox").style.display = "block";
-    document.getElementById("topupBox").style.display = "none";
+    withdrawBox.style.display = "block";
+    topupBox.style.display = "none";
 }
 
 /* TOPUP */
 function kirimTopup(){
-    const jumlah = document.getElementById("jumlah").value;
+    const jumlah = Number(document.getElementById("jumlah").value);
 
-    if(!jumlah){
-        alert("Masukkan jumlah!");
+    if(jumlah <= 0){
+        alert("Jumlah tidak valid!");
         return;
     }
 
@@ -263,20 +239,21 @@ Nama: ${currentUser.nama}`;
         `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
 }
 
-/* LIVE NOMINAL */
-document.getElementById("jumlah").addEventListener("input", function(){
-    document.getElementById("nominal").innerText =
-        formatRM(this.value);
+/* LIVE */
+jumlah.addEventListener("input", function(){
+    nominal.innerText = formatRM(this.value);
 });
 
 /* WITHDRAW */
 function submitWithdraw(){
-    const j = document.getElementById("wdJumlah").value;
-    const b = document.getElementById("wdBank").value;
-    const r = document.getElementById("wdRek").value;
-    const n = document.getElementById("wdNama").value;
+    const j = Number(wdJumlah.value);
 
-    if(!j || !b || !r || !n){
+    if(j <= 0){
+        alert("Jumlah tidak valid!");
+        return;
+    }
+
+    if(!wdBank.value || !wdRek.value || !wdNama.value){
         alert("Lengkapi data!");
         return;
     }
@@ -284,9 +261,9 @@ function submitWithdraw(){
     const msg = `Withdraw RM ${formatRM(j)}
 ID: ${currentUser.id}
 Nama: ${currentUser.nama}
-Bank: ${b}
-Rek: ${r}
-Nama: ${n}`;
+Bank: ${wdBank.value}
+Rek: ${wdRek.value}
+Nama: ${wdNama.value}`;
 
     window.location.href =
         `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
