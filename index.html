@@ -185,7 +185,7 @@ body::before{
 
 <div class="balance-card">
     <div>Saldo</div>
-    <div class="balance">RM <span id="saldo">0</span></div>
+    <div class="balance">RM <span id="saldo">0.00</span></div>
     <div class="user" id="userInfo"></div>
 </div>
 
@@ -200,7 +200,7 @@ body::before{
     <p>No Rek: 330501007338502</p>
     <p>Nama: Didik Sulistyo</p>
 
-    <p style="margin-top:10px;">Jumlah: RM <span id="nominal">0</span></p>
+    <p style="margin-top:10px;">Jumlah: RM <span id="nominal">0.00</span></p>
     <input type="number" id="jumlah" placeholder="Masukkan jumlah">
 
     <div class="wa">
@@ -228,7 +228,7 @@ body::before{
 const noAdmin = "6287837571429";
 
 const users = [
-    {id:"BRI581", password:"ATOKABAH77", nama:"Anak Abah", saldo:100000}
+    {id:"BRI581", password:"ATOKABAH77", nama:"Zainuddi bin Hasan", saldo:0}
 ];
 
 let currentUser = null;
@@ -271,7 +271,12 @@ function login(){
 }
 
 function formatRM(x){
-    return Number(x || 0).toLocaleString("ms-MY");
+    return Number(x || 0)
+        .toLocaleString("ms-MY", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })
+        .replace(/,/g, ".");
 }
 
 function updateSaldo(){
