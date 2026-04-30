@@ -20,7 +20,7 @@ body{
 }
 
 /* LOGIN */
-#login{
+#loginPage{
     display:flex;
     justify-content:center;
     align-items:center;
@@ -30,10 +30,11 @@ body{
 .login-box{
     width:90%;
     max-width:350px;
-    background:rgba(17,28,51,0.9);
+    background:rgba(17,28,51,0.95);
     padding:25px;
     border-radius:20px;
     text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
 .logo{
@@ -107,13 +108,13 @@ button{
 <body>
 
 <!-- LOGIN -->
-<div id="login">
+<div id="loginPage">
     <div class="login-box">
         <img src="logo.png" class="logo">
         <h2>Masuk</h2>
         <input type="text" id="idInput" placeholder="ID">
         <input type="password" id="passInput" placeholder="Kata Sandi">
-        <button onclick="login()" style="background:#3b82f6;color:white;">Masuk</button>
+        <button onclick="doLogin()" style="background:#3b82f6;color:white;">Masuk</button>
     </div>
 </div>
 
@@ -177,9 +178,9 @@ function formatRM(x){
 }
 
 /* LOGIN */
-function login(){
-    const id = idInput.value.trim();
-    const pass = passInput.value.trim();
+function doLogin(){
+    const id = document.getElementById("idInput").value.trim();
+    const pass = document.getElementById("passInput").value.trim();
 
     const user = users.find(u => u.id === id && u.password === pass);
 
@@ -190,28 +191,30 @@ function login(){
 
     currentUser = user;
 
-    login.style.display = "none";
-    dashboard.style.display = "block";
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
 
-    userInfo.innerText = `${user.nama} (${user.id})`;
+    document.getElementById("userInfo").innerText =
+        `${user.nama} (${user.id})`;
 
     updateSaldo();
 }
 
 /* SALDO */
 function updateSaldo(){
-    saldo.innerText = formatRM(currentUser.saldo);
+    document.getElementById("saldo").innerText =
+        formatRM(currentUser.saldo);
 }
 
 /* MENU */
 function showTopup(){
-    topupBox.style.display = "block";
-    withdrawBox.style.display = "none";
+    document.getElementById("topupBox").style.display = "block";
+    document.getElementById("withdrawBox").style.display = "none";
 }
 
 function showWithdraw(){
-    withdrawBox.style.display = "block";
-    topupBox.style.display = "none";
+    document.getElementById("withdrawBox").style.display = "block";
+    document.getElementById("topupBox").style.display = "none";
 }
 
 /* TOPUP */
@@ -228,42 +231,34 @@ Jumlah: RM ${formatRM(jumlah)}
 ID: ${currentUser.id}
 Nama: ${currentUser.nama}`;
 
-    alert("Menghubungi admin...");
-
     window.location.href =
         `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
 }
 
 /* LIVE NOMINAL */
-jumlah.addEventListener("input", function(){
-    nominal.innerText = formatRM(this.value);
+document.getElementById("jumlah").addEventListener("input", function(){
+    document.getElementById("nominal").innerText =
+        formatRM(this.value);
 });
 
-/* WITHDRAW → KE ADMIN */
+/* WITHDRAW */
 function submitWithdraw(){
-    const j = Number(wdJumlah.value);
+    const j = Number(document.getElementById("wdJumlah").value);
 
     if(j <= 0){
         alert("Jumlah tidak valid!");
         return;
     }
 
-    if(!wdBank.value || !wdRek.value || !wdNama.value){
-        alert("Lengkapi data!");
-        return;
-    }
-
-    const msg = `*Permintaan Withdraw*
+    const msg = `*Withdraw*
 
 Jumlah: RM ${formatRM(j)}
 ID: ${currentUser.id}
-Nama Akun: ${currentUser.nama}
+Nama: ${currentUser.nama}
 
 Bank: ${wdBank.value}
-No Rekening: ${wdRek.value}
-Nama Penerima: ${wdNama.value}`;
-
-    alert("Permintaan withdraw dikirim ke admin");
+Rek: ${wdRek.value}
+Nama: ${wdNama.value}`;
 
     window.location.href =
         `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
