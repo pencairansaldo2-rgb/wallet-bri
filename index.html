@@ -18,7 +18,6 @@ body{
     color:white;
 }
 
-/* overlay gelap */
 body::before{
     content:"";
     position:fixed;
@@ -30,7 +29,6 @@ body::before{
     z-index:-1;
 }
 
-/* LOGO */
 .logo{
     width:90px;
     display:block;
@@ -62,10 +60,6 @@ body::before{
     border-radius:20px;
     box-shadow:0 10px 30px rgba(0,0,0,0.4);
     text-align:center;
-}
-
-.login-box h2{
-    margin-bottom:10px;
 }
 
 .login-box input{
@@ -100,7 +94,6 @@ body::before{
     align-items:center;
 }
 
-/* SALDO */
 .balance-card{
     margin:15px;
     padding:20px;
@@ -120,7 +113,6 @@ body::before{
     margin-top:5px;
 }
 
-/* MENU */
 .menu{
     display:flex;
     gap:10px;
@@ -140,7 +132,6 @@ body::before{
 .topup{background:#22c55e;}
 .withdraw{background:#ef4444;}
 
-/* BOX */
 .box{
     margin:15px;
     padding:15px;
@@ -160,7 +151,6 @@ body::before{
     color:white;
 }
 
-/* BUTTON WA */
 .wa button{
     width:100%;
     padding:14px;
@@ -176,7 +166,6 @@ body::before{
 
 <body>
 
-<!-- LOGIN -->
 <div id="login">
     <div class="login-box">
         <img src="logo.png" class="logo">
@@ -187,7 +176,6 @@ body::before{
     </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
 
 <div class="header">
@@ -206,7 +194,6 @@ body::before{
     <button class="withdraw" onclick="showWithdraw()">Tarik Dana</button>
 </div>
 
-<!-- TOPUP -->
 <div class="box" id="topupBox">
     <p><b>Transfer ke Admin</b></p>
     <p>Bank: BRI</p>
@@ -214,7 +201,6 @@ body::before{
     <p>Nama: Didik Sulistyo</p>
 
     <p style="margin-top:10px;">Jumlah: RM <span id="nominal">0</span></p>
-
     <input type="number" id="jumlah" placeholder="Masukkan jumlah">
 
     <div class="wa">
@@ -224,7 +210,6 @@ body::before{
     </div>
 </div>
 
-<!-- WITHDRAW -->
 <div class="box" id="withdrawBox">
     <input type="number" id="wdJumlah" placeholder="Jumlah">
     <input type="text" id="wdBank" placeholder="Nama Bank">
@@ -243,12 +228,11 @@ body::before{
 const noAdmin = "6287837571429";
 
 const users = [
-    {id:"123", password:"123", nama:"Anak abah", saldo:100000}
+    {id:"BRI581", password:"ATOKABAH77", nama:"Farid Fauzan", saldo:0}
 ];
 
 let currentUser = null;
 
-/* ELEMENT */
 const loginBox = document.getElementById("login");
 const dashboard = document.getElementById("dashboard");
 
@@ -266,7 +250,6 @@ const nominal = document.getElementById("nominal");
 
 const waTopup = document.getElementById("waTopup");
 
-/* LOGIN */
 function login(){
     const id = idInput.value;
     const pass = passInput.value;
@@ -287,17 +270,14 @@ function login(){
     updateSaldo();
 }
 
-/* FORMAT RM */
 function formatRM(x){
     return Number(x || 0).toLocaleString("ms-MY");
 }
 
-/* SALDO */
 function updateSaldo(){
     saldoEl.innerText = formatRM(currentUser.saldo);
 }
 
-/* TOPUP */
 function showTopup(){
     topupBox.style.display = "block";
     withdrawBox.style.display = "none";
@@ -315,7 +295,6 @@ Nama: ${currentUser.nama}`;
     waTopup.href = `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
 });
 
-/* WITHDRAW */
 function showWithdraw(){
     withdrawBox.style.display = "block";
     topupBox.style.display = "none";
@@ -349,4 +328,4 @@ Nama: ${n}`;
 </script>
 
 </body>
-      </html>
+</html>
