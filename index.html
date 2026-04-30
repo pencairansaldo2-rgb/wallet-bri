@@ -13,23 +13,10 @@
     font-family:Segoe UI,sans-serif;
 }
 
-/* BACKGROUND FIX */
 body{
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
                 url('bg.jpg') no-repeat center center/cover;
     color:white;
-}
-
-/* LOGO */
-.logo{
-    width:90px;
-    display:block;
-    margin:0 auto 15px;
-}
-
-.logo-small{
-    width:28px;
-    margin-right:8px;
 }
 
 /* LOGIN */
@@ -43,10 +30,15 @@ body{
 .login-box{
     width:90%;
     max-width:350px;
-    background:rgba(17,28,51,0.8);
+    background:rgba(17,28,51,0.85);
     padding:25px;
     border-radius:20px;
     text-align:center;
+}
+
+.logo{
+    width:90px;
+    margin-bottom:15px;
 }
 
 .login-box input{
@@ -113,7 +105,7 @@ body{
 .box{
     margin:15px;
     padding:15px;
-    background:rgba(17,28,51,0.8);
+    background:rgba(17,28,51,0.85);
     border-radius:15px;
     display:none;
 }
@@ -156,7 +148,6 @@ body{
 <div id="dashboard">
 
 <div class="header">
-    <img src="logo.png" class="logo-small">
     My Wallet
 </div>
 
@@ -182,9 +173,7 @@ body{
     <input type="number" id="jumlah" placeholder="Masukkan jumlah">
 
     <div class="wa">
-        <a id="waTopup" target="_blank">
-            <button>WhatsApp Admin</button>
-        </a>
+        <button onclick="kirimTopup()">WhatsApp Admin</button>
     </div>
 </div>
 
@@ -210,9 +199,17 @@ const users = [
 
 let currentUser = null;
 
+/* FORMAT RM 100.000.00 */
+function formatRM(x){
+    return Number(x)
+    .toLocaleString("ms-MY",{minimumFractionDigits:2})
+    .replace(/,/g,".");
+}
+
+/* LOGIN */
 function login(){
-    const id = idInput.value;
-    const pass = passInput.value;
+    const id = document.getElementById("idInput").value;
+    const pass = document.getElementById("passInput").value;
 
     const user = users.find(u => u.id === id && u.password === pass);
 
@@ -222,63 +219,77 @@ function login(){
     }
 
     currentUser = user;
-    login.style.display="none";
-    dashboard.style.display="block";
 
-    userInfo.innerText = user.nama + " (" + user.id + ")";
+    document.getElementById("login").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+
+    document.getElementById("userInfo").innerText =
+        user.nama + " (" + user.id + ")";
+
     updateSaldo();
 }
 
-/* FORMAT RM 100.000.00 */
-function formatRM(x){
-    return Number(x)
-    .toLocaleString("ms-MY",{minimumFractionDigits:2})
-    .replace(/,/g,".");
-}
-
+/* SALDO */
 function updateSaldo(){
-    saldo.innerText = formatRM(currentUser.saldo);
+    document.getElementById("saldo").innerText =
+        formatRM(currentUser.saldo);
 }
 
+/* MENU */
 function showTopup(){
-    topupBox.style.display="block";
-    withdrawBox.style.display="none";
-}
-
-jumlah.oninput=function(){
-    nominal.innerText = formatRM(jumlah.value);
-
-    let msg = `Top Up RM ${formatRM(jumlah.value)}
-ID: ${currentUser.id}
-Nama: ${currentUser.nama}`;
-
-    waTopup.href = `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
+    document.getElementById("topupBox").style.display = "block";
+    document.getElementById("withdrawBox").style.display = "none";
 }
 
 function showWithdraw(){
-    withdrawBox.style.display="block";
-    topupBox.style.display="none";
+    document.getElementById("withdrawBox").style.display = "block";
+    document.getElementById("topupBox").style.display = "none";
 }
 
+/* TOPUP */
+function kirimTopup(){
+    const jumlah = document.getElementById("jumlah").value;
+
+    if(!jumlah){
+        alert("Masukkan jumlah!");
+        return;
+    }
+
+    const msg = `Top Up RM ${formatRM(jumlah)}
+ID: ${currentUser.id}
+Nama: ${currentUser.nama}`;
+
+    window.location.href =
+        `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
+}
+
+/* LIVE NOMINAL */
+document.getElementById("jumlah").addEventListener("input", function(){
+    document.getElementById("nominal").innerText =
+        formatRM(this.value);
+});
+
+/* WITHDRAW */
 function submitWithdraw(){
-    let j = wdJumlah.value;
-    let b = wdBank.value;
-    let r = wdRek.value;
-    let n = wdNama.value;
+    const j = document.getElementById("wdJumlah").value;
+    const b = document.getElementById("wdBank").value;
+    const r = document.getElementById("wdRek").value;
+    const n = document.getElementById("wdNama").value;
 
     if(!j || !b || !r || !n){
         alert("Lengkapi data!");
         return;
     }
 
-    let msg = `Withdraw RM ${formatRM(j)}
+    const msg = `Withdraw RM ${formatRM(j)}
 ID: ${currentUser.id}
 Nama: ${currentUser.nama}
 Bank: ${b}
 Rek: ${r}
 Nama: ${n}`;
 
-    window.open(`https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`);
+    window.location.href =
+        `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
 }
 
 </script>
