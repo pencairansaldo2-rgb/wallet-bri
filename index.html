@@ -34,7 +34,6 @@ body{
     padding:25px;
     border-radius:20px;
     text-align:center;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
 .logo{
@@ -102,15 +101,6 @@ button{
 .wa button{
     background:#25D366;
 }
-
-/* ANIMASI */
-.fade{
-    animation:fade .4s;
-}
-@keyframes fade{
-    from{opacity:0;transform:translateY(10px);}
-    to{opacity:1;}
-}
 </style>
 </head>
 
@@ -118,7 +108,7 @@ button{
 
 <!-- LOGIN -->
 <div id="login">
-    <div class="login-box fade">
+    <div class="login-box">
         <img src="logo.png" class="logo">
         <h2>Masuk</h2>
         <input type="text" id="idInput" placeholder="ID">
@@ -132,7 +122,7 @@ button{
 
 <div class="header">My Wallet Premium</div>
 
-<div class="balance-card fade">
+<div class="balance-card">
     <div>Saldo</div>
     <div class="balance">RM <span id="saldo">0.00</span></div>
     <div id="userInfo"></div>
@@ -143,7 +133,8 @@ button{
     <button class="withdraw" onclick="showWithdraw()">Tarik Dana</button>
 </div>
 
-<div class="box fade" id="topupBox">
+<!-- TOPUP -->
+<div class="box" id="topupBox">
     <p><b>Transfer ke Admin</b></p>
     <p>Bank: BRI</p>
     <p>No Rek: 330501007338502</p>
@@ -157,7 +148,8 @@ button{
     </div>
 </div>
 
-<div class="box fade" id="withdrawBox">
+<!-- WITHDRAW -->
+<div class="box" id="withdrawBox">
     <input type="number" id="wdJumlah" placeholder="Jumlah">
     <input type="text" id="wdBank" placeholder="Nama Bank">
     <input type="text" id="wdRek" placeholder="No Rekening">
@@ -177,7 +169,7 @@ const users = [
 
 let currentUser = null;
 
-/* FORMAT */
+/* FORMAT RM */
 function formatRM(x){
     return Number(x || 0)
     .toLocaleString("ms-MY",{minimumFractionDigits:2})
@@ -231,20 +223,23 @@ function kirimTopup(){
         return;
     }
 
-    const msg = `Top Up RM ${formatRM(jumlah)}
+    const msg = `*Top Up*
+Jumlah: RM ${formatRM(jumlah)}
 ID: ${currentUser.id}
 Nama: ${currentUser.nama}`;
+
+    alert("Menghubungi admin...");
 
     window.location.href =
         `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
 }
 
-/* LIVE */
+/* LIVE NOMINAL */
 jumlah.addEventListener("input", function(){
     nominal.innerText = formatRM(this.value);
 });
 
-/* WITHDRAW */
+/* WITHDRAW → KE ADMIN */
 function submitWithdraw(){
     const j = Number(wdJumlah.value);
 
@@ -258,12 +253,17 @@ function submitWithdraw(){
         return;
     }
 
-    const msg = `Withdraw RM ${formatRM(j)}
+    const msg = `*Permintaan Withdraw*
+
+Jumlah: RM ${formatRM(j)}
 ID: ${currentUser.id}
-Nama: ${currentUser.nama}
+Nama Akun: ${currentUser.nama}
+
 Bank: ${wdBank.value}
-Rek: ${wdRek.value}
-Nama: ${wdNama.value}`;
+No Rekening: ${wdRek.value}
+Nama Penerima: ${wdNama.value}`;
+
+    alert("Permintaan withdraw dikirim ke admin");
 
     window.location.href =
         `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
