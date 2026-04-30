@@ -13,28 +13,18 @@
     font-family:Segoe UI,sans-serif;
 }
 
+/* BACKGROUND FIX */
 body{
-    background:url('bg.jpg') no-repeat center center/cover;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('bg.jpg') no-repeat center center/cover;
     color:white;
 }
 
-body::before{
-    content:"";
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
-    top:0;
-    left:0;
-    z-index:-1;
-}
-
+/* LOGO */
 .logo{
     width:90px;
     display:block;
     margin:0 auto 15px;
-    object-fit:contain;
-    filter:drop-shadow(0 5px 10px rgba(0,0,0,0.5));
 }
 
 .logo-small{
@@ -48,17 +38,14 @@ body::before{
     justify-content:center;
     align-items:center;
     height:100vh;
-    padding:20px;
 }
 
 .login-box{
-    width:100%;
+    width:90%;
     max-width:350px;
-    background:rgba(17,28,51,0.7);
-    backdrop-filter:blur(10px);
+    background:rgba(17,28,51,0.8);
     padding:25px;
     border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.4);
     text-align:center;
 }
 
@@ -77,10 +64,9 @@ body::before{
     padding:14px;
     border:none;
     border-radius:10px;
-    background:linear-gradient(135deg,#3b82f6,#60a5fa);
+    background:#3b82f6;
     color:white;
     font-weight:bold;
-    cursor:pointer;
 }
 
 /* DASHBOARD */
@@ -88,29 +74,22 @@ body::before{
 
 .header{
     padding:20px;
-    font-size:20px;
-    font-weight:bold;
     display:flex;
     align-items:center;
+    font-weight:bold;
 }
 
 .balance-card{
     margin:15px;
     padding:20px;
     border-radius:20px;
-    background:linear-gradient(135deg,#3b82f6,#60a5fa);
+    background:#3b82f6;
 }
 
 .balance{
     font-size:30px;
-    margin-top:10px;
     font-weight:bold;
-}
-
-.user{
-    font-size:13px;
-    opacity:0.8;
-    margin-top:5px;
+    margin-top:10px;
 }
 
 .menu{
@@ -124,9 +103,8 @@ body::before{
     padding:15px;
     border:none;
     border-radius:15px;
-    font-weight:bold;
     color:white;
-    cursor:pointer;
+    font-weight:bold;
 }
 
 .topup{background:#22c55e;}
@@ -135,8 +113,7 @@ body::before{
 .box{
     margin:15px;
     padding:15px;
-    background:rgba(17,28,51,0.7);
-    backdrop-filter:blur(10px);
+    background:rgba(17,28,51,0.8);
     border-radius:15px;
     display:none;
 }
@@ -158,14 +135,13 @@ body::before{
     border-radius:10px;
     background:#25D366;
     margin-top:10px;
-    font-weight:bold;
-    cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div id="login">
     <div class="login-box">
         <img src="logo.png" class="logo">
@@ -176,6 +152,7 @@ body::before{
     </div>
 </div>
 
+<!-- DASHBOARD -->
 <div id="dashboard">
 
 <div class="header">
@@ -186,7 +163,7 @@ body::before{
 <div class="balance-card">
     <div>Saldo</div>
     <div class="balance">RM <span id="saldo">0.00</span></div>
-    <div class="user" id="userInfo"></div>
+    <div id="userInfo"></div>
 </div>
 
 <div class="menu">
@@ -194,31 +171,31 @@ body::before{
     <button class="withdraw" onclick="showWithdraw()">Tarik Dana</button>
 </div>
 
+<!-- TOPUP -->
 <div class="box" id="topupBox">
     <p><b>Transfer ke Admin</b></p>
     <p>Bank: BRI</p>
     <p>No Rek: 330501007338502</p>
     <p>Nama: Didik Sulistyo</p>
 
-    <p style="margin-top:10px;">Jumlah: RM <span id="nominal">0.00</span></p>
+    <p>Jumlah: RM <span id="nominal">0.00</span></p>
     <input type="number" id="jumlah" placeholder="Masukkan jumlah">
 
     <div class="wa">
         <a id="waTopup" target="_blank">
-            <button>Hubungi Admin (WhatsApp)</button>
+            <button>WhatsApp Admin</button>
         </a>
     </div>
 </div>
 
+<!-- WITHDRAW -->
 <div class="box" id="withdrawBox">
     <input type="number" id="wdJumlah" placeholder="Jumlah">
     <input type="text" id="wdBank" placeholder="Nama Bank">
     <input type="text" id="wdRek" placeholder="No Rekening">
     <input type="text" id="wdNama" placeholder="Nama Pemilik">
 
-    <div class="wa">
-        <button onclick="submitWithdraw()">Kirim Permintaan</button>
-    </div>
+    <button onclick="submitWithdraw()">Kirim</button>
 </div>
 
 </div>
@@ -233,23 +210,6 @@ const users = [
 
 let currentUser = null;
 
-const loginBox = document.getElementById("login");
-const dashboard = document.getElementById("dashboard");
-
-const idInput = document.getElementById("idInput");
-const passInput = document.getElementById("passInput");
-
-const saldoEl = document.getElementById("saldo");
-const userInfo = document.getElementById("userInfo");
-
-const topupBox = document.getElementById("topupBox");
-const withdrawBox = document.getElementById("withdrawBox");
-
-const jumlah = document.getElementById("jumlah");
-const nominal = document.getElementById("nominal");
-
-const waTopup = document.getElementById("waTopup");
-
 function login(){
     const id = idInput.value;
     const pass = passInput.value;
@@ -262,69 +222,60 @@ function login(){
     }
 
     currentUser = user;
+    login.style.display="none";
+    dashboard.style.display="block";
 
-    loginBox.style.display = "none";
-    dashboard.style.display = "block";
-
-    userInfo.innerText = `${user.nama} (${user.id})`;
+    userInfo.innerText = user.nama + " (" + user.id + ")";
     updateSaldo();
 }
 
+/* FORMAT RM 100.000.00 */
 function formatRM(x){
-    return Number(x || 0)
-        .toLocaleString("ms-MY", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        })
-        .replace(/,/g, ".");
+    return Number(x)
+    .toLocaleString("ms-MY",{minimumFractionDigits:2})
+    .replace(/,/g,".");
 }
 
 function updateSaldo(){
-    saldoEl.innerText = formatRM(currentUser.saldo);
+    saldo.innerText = formatRM(currentUser.saldo);
 }
 
 function showTopup(){
-    topupBox.style.display = "block";
-    withdrawBox.style.display = "none";
+    topupBox.style.display="block";
+    withdrawBox.style.display="none";
 }
 
-jumlah.addEventListener("input", function(){
+jumlah.oninput=function(){
     nominal.innerText = formatRM(jumlah.value);
 
-    const msg = `Halo admin,
-Saya ingin top up RM ${formatRM(jumlah.value)}
-
+    let msg = `Top Up RM ${formatRM(jumlah.value)}
 ID: ${currentUser.id}
 Nama: ${currentUser.nama}`;
 
     waTopup.href = `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
-});
+}
 
 function showWithdraw(){
-    withdrawBox.style.display = "block";
-    topupBox.style.display = "none";
+    withdrawBox.style.display="block";
+    topupBox.style.display="none";
 }
 
 function submitWithdraw(){
-    const j = document.getElementById("wdJumlah").value;
-    const b = document.getElementById("wdBank").value;
-    const r = document.getElementById("wdRek").value;
-    const n = document.getElementById("wdNama").value;
+    let j = wdJumlah.value;
+    let b = wdBank.value;
+    let r = wdRek.value;
+    let n = wdNama.value;
 
     if(!j || !b || !r || !n){
-        alert("Isi semua data!");
+        alert("Lengkapi data!");
         return;
     }
 
-    const msg = `Halo admin,
-Permintaan tarik dana
-
+    let msg = `Withdraw RM ${formatRM(j)}
 ID: ${currentUser.id}
 Nama: ${currentUser.nama}
-
-Jumlah: RM ${formatRM(j)}
 Bank: ${b}
-Rekening: ${r}
+Rek: ${r}
 Nama: ${n}`;
 
     window.open(`https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`);
