@@ -6,12 +6,7 @@
 <title>My Wallet Premium</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
 
 body{
     background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
@@ -34,13 +29,9 @@ body{
     padding:25px;
     border-radius:20px;
     text-align:center;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
-.logo{
-    width:80px;
-    margin-bottom:15px;
-}
+.logo{width:80px;margin-bottom:15px;}
 
 input{
     width:100%;
@@ -64,11 +55,7 @@ button{
 /* DASHBOARD */
 #dashboard{display:none;}
 
-.header{
-    padding:20px;
-    font-size:18px;
-    font-weight:bold;
-}
+.header{padding:20px;font-size:18px;font-weight:bold;}
 
 .balance-card{
     margin:15px;
@@ -77,16 +64,9 @@ button{
     background:linear-gradient(135deg,#3b82f6,#1d4ed8);
 }
 
-.balance{
-    font-size:32px;
-    font-weight:bold;
-}
+.balance{font-size:32px;font-weight:bold;}
 
-.menu{
-    display:flex;
-    gap:10px;
-    padding:15px;
-}
+.menu{display:flex;gap:10px;padding:15px;}
 
 .topup{background:#22c55e;}
 .withdraw{background:#ef4444;}
@@ -99,9 +79,7 @@ button{
     display:none;
 }
 
-.wa button{
-    background:#25D366;
-}
+.wa button{background:#25D366;}
 </style>
 </head>
 
@@ -182,6 +160,11 @@ function doLogin(){
     const id = document.getElementById("idInput").value.trim();
     const pass = document.getElementById("passInput").value.trim();
 
+    if(!id || !pass){
+        alert("Isi ID dan Password!");
+        return;
+    }
+
     const user = users.find(u => u.id === id && u.password === pass);
 
     if(!user){
@@ -202,6 +185,8 @@ function doLogin(){
 
 /* SALDO */
 function updateSaldo(){
+    if(!currentUser) return;
+
     document.getElementById("saldo").innerText =
         formatRM(currentUser.saldo);
 }
@@ -235,18 +220,25 @@ Nama: ${currentUser.nama}`;
         `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
 }
 
-/* LIVE NOMINAL */
-document.getElementById("jumlah").addEventListener("input", function(){
-    document.getElementById("nominal").innerText =
-        formatRM(this.value);
-});
+/* LOAD AMAN */
+window.onload = function(){
+    const jumlahInput = document.getElementById("jumlah");
+
+    jumlahInput.addEventListener("input", function(){
+        document.getElementById("nominal").innerText =
+            formatRM(this.value);
+    });
+};
 
 /* WITHDRAW */
 function submitWithdraw(){
     const j = Number(document.getElementById("wdJumlah").value);
+    const bank = document.getElementById("wdBank").value;
+    const rek = document.getElementById("wdRek").value;
+    const nama = document.getElementById("wdNama").value;
 
-    if(j <= 0){
-        alert("Jumlah tidak valid!");
+    if(j <= 0 || !bank || !rek || !nama){
+        alert("Lengkapi data!");
         return;
     }
 
@@ -256,9 +248,9 @@ Jumlah: RM ${formatRM(j)}
 ID: ${currentUser.id}
 Nama: ${currentUser.nama}
 
-Bank: ${wdBank.value}
-Rek: ${wdRek.value}
-Nama: ${wdNama.value}`;
+Bank: ${bank}
+Rek: ${rek}
+Nama: ${nama}`;
 
     window.location.href =
         `https://wa.me/${noAdmin}?text=${encodeURIComponent(msg)}`;
