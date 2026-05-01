@@ -37,7 +37,12 @@ body{
     text-align:center;
 }
 
-.login h2{margin-bottom:15px;}
+.login img{
+    width:70px;
+    margin-bottom:10px;
+}
+
+.login h2{margin-bottom:10px;}
 
 .login input{
     width:100%;
@@ -70,9 +75,17 @@ body{
     align-items:center;
 }
 
-.user{
-    font-size:14px;
-    opacity:0.8;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:bold;
+}
+
+.brand img{
+    width:32px;
+    height:32px;
+    border-radius:8px;
 }
 
 /* SALDO CARD */
@@ -82,17 +95,15 @@ body{
     border-radius:20px;
     background:linear-gradient(135deg,rgba(59,130,246,0.8),rgba(29,78,216,0.8));
     backdrop-filter: blur(10px);
-    box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
-.card h3{font-size:14px;opacity:0.8;}
 .balance{
     font-size:32px;
     font-weight:bold;
     margin-top:5px;
 }
 
-/* ACTIONS */
+/* ACTION */
 .actions{
     display:flex;
     justify-content:space-around;
@@ -113,6 +124,11 @@ body{
     justify-content:center;
     margin-bottom:5px;
     background:rgba(255,255,255,0.08);
+    overflow:hidden;
+}
+
+.circle img{
+    width:30px;
 }
 
 /* BOX */
@@ -145,7 +161,7 @@ input{
     margin-top:8px;
 }
 
-/* TRANSAKSI */
+/* HISTORY */
 .history{
     margin:15px;
 }
@@ -170,9 +186,10 @@ input{
     backdrop-filter: blur(10px);
 }
 
-.nav div{
-    text-align:center;
-    font-size:12px;
+.nav img{
+    width:22px;
+    display:block;
+    margin:auto;
 }
 </style>
 </head>
@@ -182,6 +199,7 @@ input{
 <!-- LOGIN -->
 <div id="loginPage">
     <div class="login">
+        <img src="./logo.png">
         <h2>Neo Wallet</h2>
         <input id="id" placeholder="ID">
         <input id="pw" type="password" placeholder="Password">
@@ -193,78 +211,87 @@ input{
 <div id="app">
 
 <div class="header">
-    <div>🏦 Neo Wallet</div>
-    <div class="user" id="userText"></div>
+    <div class="brand">
+        <img src="./logo.png">
+        Neo Wallet
+    </div>
 </div>
 
-<!-- SALDO -->
 <div class="card">
-    <h3>Saldo Tersedia</h3>
+    <div>Saldo Tersedia</div>
     <div class="balance">RM <span id="saldo">0.00</span></div>
 </div>
 
-<!-- ACTION -->
 <div class="actions">
+
     <div class="action" onclick="show('topup')">
-        <div class="circle">➕</div>
+        <div class="circle">
+            <img src="./logo.png">
+        </div>
         Top Up
     </div>
 
     <div class="action" onclick="show('wd')">
-        <div class="circle">➖</div>
+        <div class="circle">
+            <img src="./logo.png">
+        </div>
         Tarik
     </div>
 
     <div class="action">
-        <div class="circle">📊</div>
-        Aktivitas
+        <div class="circle">
+            <img src="./logo.png">
+        </div>
+        Akun
     </div>
+
 </div>
 
-<!-- TOPUP -->
 <div class="box" id="topup">
     <input id="tamount" placeholder="Jumlah">
-    <button class="btn" onclick="topup()">Kirim Top Up</button>
+    <button class="btn" onclick="topup()">Top Up</button>
 </div>
 
-<!-- WITHDRAW -->
 <div class="box" id="wd">
     <input id="wamount" placeholder="Jumlah">
     <input id="bank" placeholder="Bank">
     <input id="rek" placeholder="No Rekening">
     <input id="nama" placeholder="Nama">
-    <button class="btn" onclick="withdraw()">Kirim Withdraw</button>
+    <button class="btn" onclick="withdraw()">Withdraw</button>
 </div>
 
-<!-- HISTORY -->
 <div class="history">
     <h4>Riwayat</h4>
     <div id="log"></div>
 </div>
 
-<!-- NAV -->
 <div class="nav">
-    <div>🏠<br>Home</div>
-    <div>💳<br>Wallet</div>
-    <div>👤<br>Akun</div>
+    <div>
+        <img src="./logo.png">
+        Home
+    </div>
+    <div>
+        <img src="./logo.png">
+        Wallet
+    </div>
+    <div>
+        <img src="./logo.png">
+        Akun
+    </div>
 </div>
 
 </div>
 
 <script>
 
-const admin = "6287837571429";
+const admin="6287837571429";
 
-let user = {
+let user={
     id:"BRI581",
     pass:"ATOKABAH77",
     nama:"Zainuddi bin Hasan",
     saldo:100000
 };
-
-function formatRM(x){
-    return Number(x||0).toLocaleString("ms-MY",{minimumFractionDigits:2}).replace(/,/g,".");
-}
 
 function login(){
     let id=document.getElementById("id").value;
@@ -273,36 +300,33 @@ function login(){
     if(id==user.id && pw==user.pass){
         document.getElementById("loginPage").style.display="none";
         document.getElementById("app").style.display="block";
-
-        document.getElementById("saldo").innerText=formatRM(user.saldo);
-        document.getElementById("userText").innerText=user.nama;
+        document.getElementById("saldo").innerText=
+        Number(user.saldo).toLocaleString("ms-MY",{minimumFractionDigits:2});
     }else{
         alert("Login gagal");
     }
 }
 
-function show(t){
+function show(x){
     document.getElementById("topup").style.display="none";
     document.getElementById("wd").style.display="none";
-
-    document.getElementById(t).style.display="block";
+    document.getElementById(x).style.display="block";
 }
 
-function log(text){
-    let div=document.createElement("div");
-    div.className="tx";
-    div.innerText=text;
-    document.getElementById("log").prepend(div);
+function log(t){
+    let d=document.createElement("div");
+    d.className="tx";
+    d.innerText=t;
+    document.getElementById("log").prepend(d);
 }
 
 function topup(){
     let j=document.getElementById("tamount").value;
 
-    let msg=`TOP UP\nID:${user.id}\nJumlah: RM ${formatRM(j)}`;
-
+    let msg=`TOP UP\nID:${user.id}\nJumlah RM ${j}`;
     window.location=`https://wa.me/${admin}?text=${encodeURIComponent(msg)}`;
 
-    log("Top Up RM "+formatRM(j));
+    log("Topup RM "+j);
 }
 
 function withdraw(){
@@ -311,11 +335,10 @@ function withdraw(){
     let rek=document.getElementById("rek").value;
     let nama=document.getElementById("nama").value;
 
-    let msg=`WITHDRAW\nID:${user.id}\nNama:${nama}\nBank:${bank}\nRek:${rek}\nJumlah: RM ${formatRM(j)}`;
-
+    let msg=`WITHDRAW\nID:${user.id}\nNama:${nama}\nBank:${bank}\nRek:${rek}\nRM ${j}`;
     window.location=`https://wa.me/${admin}?text=${encodeURIComponent(msg)}`;
 
-    log("Withdraw RM "+formatRM(j));
+    log("Withdraw RM "+j);
 }
 
 </script>
