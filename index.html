@@ -97,6 +97,13 @@ button{
     font-weight:bold;
 }
 
+/* USER INFO */
+.userinfo{
+    margin:15px;
+    font-size:13px;
+    opacity:0.8;
+}
+
 /* MENU */
 .menu{
     display:flex;
@@ -189,10 +196,14 @@ button{
 </div>
 
 <div class="card">
-    <div>Saldo</div>
+    <div>Saldo Tersedia</div>
     <div class="balance">RM <span id="saldo">0.00</span></div>
 </div>
 
+<!-- USER -->
+<div class="userinfo" id="userInfo"></div>
+
+<!-- MENU -->
 <div class="menu">
 
     <div onclick="show('topup')">
@@ -224,7 +235,7 @@ button{
 
 <!-- HISTORY -->
 <div style="margin:15px;">
-    <h4>Riwayat</h4>
+    <h4>Riwayat Transaksi</h4>
     <div id="log"></div>
 </div>
 
@@ -252,8 +263,8 @@ function formatRM(x){
     return Number(x||0).toLocaleString("ms-MY",{minimumFractionDigits:2});
 }
 
-/* 🔊 SUARA NOTIF */
-function playSound(type="success"){
+/* 🔊 SOUND */
+function sound(type="ok"){
     let ctx=new (window.AudioContext||window.webkitAudioContext)();
     let o=ctx.createOscillator();
     let g=ctx.createGain();
@@ -261,15 +272,15 @@ function playSound(type="success"){
     o.connect(g);
     g.connect(ctx.destination);
 
-    o.frequency.value = type==="error"?300:700;
+    o.frequency.value=type=="error"?300:700;
     g.gain.value=0.2;
 
     o.start();
     setTimeout(()=>o.stop(),200);
 }
 
-/* 🔊 SUARA UANG MASUK */
-function moneyInSound(){
+/* 🔊 MONEY IN */
+function moneyIn(){
     let ctx=new (window.AudioContext||window.webkitAudioContext)();
 
     let o1=ctx.createOscillator();
@@ -302,13 +313,18 @@ function login(){
     if(id==user.id && pw==user.pass){
         document.getElementById("loginPage").style.display="none";
         document.getElementById("app").style.display="block";
+
         document.getElementById("saldo").innerText=formatRM(user.saldo);
+
+        document.getElementById("userInfo").innerText =
+        user.nama+" | "+user.id;
+
     }else{
         alert("Login gagal");
     }
 }
 
-/* SHOW BOX */
+/* SHOW */
 function show(x){
     document.getElementById("topup").style.display="none";
     document.getElementById("wd").style.display="none";
@@ -327,20 +343,20 @@ function log(t,s="PENDING"){
 function topup(){
     let j=document.getElementById("tamount").value;
 
-    if(!j){playSound("error");return;}
+    if(!j){sound("error");return;}
 
     let msg=`TOP UP\nID:${user.id}\nRM ${j}\nPENDING`;
 
     window.location=`https://wa.me/${admin}?text=${encodeURIComponent(msg)}`;
 
     log("Top Up RM "+j,"PENDING");
-    playSound();
+    sound();
 
-    /* simulasi masuk uang */
     setTimeout(()=>{
         user.saldo+=Number(j);
         document.getElementById("saldo").innerText=formatRM(user.saldo);
-        moneyInSound();
+
+        moneyIn();
         log("Saldo Masuk RM "+j,"SUCCESS");
     },3000);
 }
@@ -353,7 +369,7 @@ function withdraw(){
     let nama=document.getElementById("nama").value;
 
     if(!j||!bank||!rek||!nama){
-        playSound("error");
+        sound("error");
         return;
     }
 
@@ -362,7 +378,7 @@ function withdraw(){
     window.location=`https://wa.me/${admin}?text=${encodeURIComponent(msg)}`;
 
     log("Withdraw RM "+j,"PENDING");
-    playSound();
+    sound();
 }
 
 </script>
