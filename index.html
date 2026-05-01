@@ -10,11 +10,11 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:system-ui, sans-serif;
+    font-family:system-ui,sans-serif;
 }
 
 body{
-    background: linear-gradient(160deg,#071a2f,#0b2a4a,#06121f);
+    background:linear-gradient(160deg,#071a2f,#0b2a4a,#06121f);
     color:white;
 }
 
@@ -30,10 +30,9 @@ body{
     width:90%;
     max-width:360px;
     background:rgba(255,255,255,0.06);
-    backdrop-filter: blur(10px);
+    backdrop-filter:blur(10px);
     padding:25px;
     border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.5);
     text-align:center;
 }
 
@@ -42,26 +41,24 @@ body{
     margin-bottom:10px;
 }
 
-.login h2{margin-bottom:10px;}
-
-.login input{
+input{
     width:100%;
-    padding:14px;
-    margin:8px 0;
+    padding:12px;
+    margin:6px 0;
     border:none;
-    border-radius:12px;
-    background:rgba(255,255,255,0.1);
+    border-radius:10px;
+    background:rgba(255,255,255,0.08);
     color:white;
 }
 
-.login button{
+button{
     width:100%;
-    padding:14px;
+    padding:12px;
     border:none;
-    border-radius:12px;
+    border-radius:10px;
+    font-weight:bold;
     background:#3b82f6;
     color:white;
-    font-weight:bold;
 }
 
 /* APP */
@@ -77,58 +74,55 @@ body{
 
 .brand{
     display:flex;
-    align-items:center;
     gap:10px;
+    align-items:center;
     font-weight:bold;
 }
 
 .brand img{
     width:32px;
-    height:32px;
     border-radius:8px;
 }
 
-/* SALDO CARD */
+/* CARD */
 .card{
     margin:15px;
     padding:20px;
     border-radius:20px;
-    background:linear-gradient(135deg,rgba(59,130,246,0.8),rgba(29,78,216,0.8));
-    backdrop-filter: blur(10px);
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
 }
 
 .balance{
     font-size:32px;
     font-weight:bold;
-    margin-top:5px;
 }
 
-/* ACTION */
-.actions{
+/* MENU */
+.menu{
     display:flex;
     justify-content:space-around;
     margin:15px;
 }
 
-.action{
+.menu div{
     text-align:center;
     font-size:12px;
+    cursor:pointer;
 }
 
-.circle{
+.icon{
     width:55px;
     height:55px;
     border-radius:50%;
     display:flex;
-    align-items:center;
     justify-content:center;
-    margin-bottom:5px;
+    align-items:center;
     background:rgba(255,255,255,0.08);
-    overflow:hidden;
+    margin-bottom:5px;
 }
 
-.circle img{
-    width:30px;
+.icon img{
+    width:28px;
 }
 
 /* BOX */
@@ -140,36 +134,16 @@ body{
     display:none;
 }
 
-input{
-    width:100%;
-    padding:12px;
-    margin:6px 0;
-    border-radius:10px;
-    border:none;
-    background:rgba(255,255,255,0.08);
-    color:white;
-}
-
 .btn{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
     background:#22c55e;
-    color:white;
-    font-weight:bold;
     margin-top:8px;
 }
 
 /* HISTORY */
-.history{
-    margin:15px;
-}
-
 .tx{
     background:rgba(255,255,255,0.05);
-    padding:12px;
-    border-radius:12px;
+    padding:10px;
+    border-radius:10px;
     margin-top:8px;
     font-size:13px;
 }
@@ -182,14 +156,11 @@ input{
     display:flex;
     justify-content:space-around;
     background:rgba(0,0,0,0.4);
-    padding:12px 0;
-    backdrop-filter: blur(10px);
+    padding:10px 0;
 }
 
 .nav img{
     width:22px;
-    display:block;
-    margin:auto;
 }
 </style>
 </head>
@@ -218,40 +189,31 @@ input{
 </div>
 
 <div class="card">
-    <div>Saldo Tersedia</div>
+    <div>Saldo</div>
     <div class="balance">RM <span id="saldo">0.00</span></div>
 </div>
 
-<div class="actions">
+<div class="menu">
 
-    <div class="action" onclick="show('topup')">
-        <div class="circle">
-            <img src="./logo.png">
-        </div>
+    <div onclick="show('topup')">
+        <div class="icon"><img src="./logo.png"></div>
         Top Up
     </div>
 
-    <div class="action" onclick="show('wd')">
-        <div class="circle">
-            <img src="./logo.png">
-        </div>
-        Tarik
-    </div>
-
-    <div class="action">
-        <div class="circle">
-            <img src="./logo.png">
-        </div>
-        Akun
+    <div onclick="show('wd')">
+        <div class="icon"><img src="./logo.png"></div>
+        Withdraw
     </div>
 
 </div>
 
+<!-- TOPUP -->
 <div class="box" id="topup">
     <input id="tamount" placeholder="Jumlah">
     <button class="btn" onclick="topup()">Top Up</button>
 </div>
 
+<!-- WD -->
 <div class="box" id="wd">
     <input id="wamount" placeholder="Jumlah">
     <input id="bank" placeholder="Bank">
@@ -260,24 +222,17 @@ input{
     <button class="btn" onclick="withdraw()">Withdraw</button>
 </div>
 
-<div class="history">
+<!-- HISTORY -->
+<div style="margin:15px;">
     <h4>Riwayat</h4>
     <div id="log"></div>
 </div>
 
+<!-- NAV -->
 <div class="nav">
-    <div>
-        <img src="./logo.png">
-        Home
-    </div>
-    <div>
-        <img src="./logo.png">
-        Wallet
-    </div>
-    <div>
-        <img src="./logo.png">
-        Akun
-    </div>
+    <div><img src="./logo.png"><br>Home</div>
+    <div><img src="./logo.png"><br>Wallet</div>
+    <div><img src="./logo.png"><br>Akun</div>
 </div>
 
 </div>
@@ -293,6 +248,53 @@ let user={
     saldo:100000
 };
 
+function formatRM(x){
+    return Number(x||0).toLocaleString("ms-MY",{minimumFractionDigits:2});
+}
+
+/* 🔊 SUARA NOTIF */
+function playSound(type="success"){
+    let ctx=new (window.AudioContext||window.webkitAudioContext)();
+    let o=ctx.createOscillator();
+    let g=ctx.createGain();
+
+    o.connect(g);
+    g.connect(ctx.destination);
+
+    o.frequency.value = type==="error"?300:700;
+    g.gain.value=0.2;
+
+    o.start();
+    setTimeout(()=>o.stop(),200);
+}
+
+/* 🔊 SUARA UANG MASUK */
+function moneyInSound(){
+    let ctx=new (window.AudioContext||window.webkitAudioContext)();
+
+    let o1=ctx.createOscillator();
+    let o2=ctx.createOscillator();
+    let g=ctx.createGain();
+
+    o1.frequency.value=880;
+    o2.frequency.value=660;
+
+    o1.connect(g);
+    o2.connect(g);
+    g.connect(ctx.destination);
+
+    g.gain.value=0.2;
+
+    o1.start();
+    o2.start();
+
+    setTimeout(()=>{
+        o1.stop();
+        o2.stop();
+    },300);
+}
+
+/* LOGIN */
 function login(){
     let id=document.getElementById("id").value;
     let pw=document.getElementById("pw").value;
@@ -300,45 +302,67 @@ function login(){
     if(id==user.id && pw==user.pass){
         document.getElementById("loginPage").style.display="none";
         document.getElementById("app").style.display="block";
-        document.getElementById("saldo").innerText=
-        Number(user.saldo).toLocaleString("ms-MY",{minimumFractionDigits:2});
+        document.getElementById("saldo").innerText=formatRM(user.saldo);
     }else{
         alert("Login gagal");
     }
 }
 
+/* SHOW BOX */
 function show(x){
     document.getElementById("topup").style.display="none";
     document.getElementById("wd").style.display="none";
     document.getElementById(x).style.display="block";
 }
 
-function log(t){
+/* LOG */
+function log(t,s="PENDING"){
     let d=document.createElement("div");
     d.className="tx";
-    d.innerText=t;
+    d.innerText=`🟡 ${t} [${s}]`;
     document.getElementById("log").prepend(d);
 }
 
+/* TOPUP */
 function topup(){
     let j=document.getElementById("tamount").value;
 
-    let msg=`TOP UP\nID:${user.id}\nJumlah RM ${j}`;
+    if(!j){playSound("error");return;}
+
+    let msg=`TOP UP\nID:${user.id}\nRM ${j}\nPENDING`;
+
     window.location=`https://wa.me/${admin}?text=${encodeURIComponent(msg)}`;
 
-    log("Topup RM "+j);
+    log("Top Up RM "+j,"PENDING");
+    playSound();
+
+    /* simulasi masuk uang */
+    setTimeout(()=>{
+        user.saldo+=Number(j);
+        document.getElementById("saldo").innerText=formatRM(user.saldo);
+        moneyInSound();
+        log("Saldo Masuk RM "+j,"SUCCESS");
+    },3000);
 }
 
+/* WITHDRAW */
 function withdraw(){
     let j=document.getElementById("wamount").value;
     let bank=document.getElementById("bank").value;
     let rek=document.getElementById("rek").value;
     let nama=document.getElementById("nama").value;
 
-    let msg=`WITHDRAW\nID:${user.id}\nNama:${nama}\nBank:${bank}\nRek:${rek}\nRM ${j}`;
+    if(!j||!bank||!rek||!nama){
+        playSound("error");
+        return;
+    }
+
+    let msg=`WITHDRAW\nID:${user.id}\n${nama}\n${bank}\n${rek}\nRM ${j}\nPENDING`;
+
     window.location=`https://wa.me/${admin}?text=${encodeURIComponent(msg)}`;
 
-    log("Withdraw RM "+j);
+    log("Withdraw RM "+j,"PENDING");
+    playSound();
 }
 
 </script>
